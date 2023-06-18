@@ -74,7 +74,7 @@ ok_load_setup:
 	int	0x13
 	mov	ch,0x00
 	mov	[cs:sectors],cx
-	mov	ax,INITSEG
+	m	ax,INITSEG
 	mov	es,ax
 
 ; Print some inane message
@@ -115,6 +115,7 @@ ok_load_setup:
 undef_root:
 	jmp undef_root
 root_defined:
+; 
 	mov	[cs:root_dev],ax
 
 ; after that (everyting loaded), we jump to
@@ -134,9 +135,10 @@ head:	dw 0			; current head
 track:	dw 0			; current track
 
 read_it:
-	mov ax,es
+	mov ax,es 			;es=0x1000
 	test ax,0x0fff
 die:	jne die			; es must be at 64kB boundary
+
 	xor bx,bx		; bx is starting address within segment
 rp_read:
 	mov ax,es
